@@ -1,3 +1,10 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .inputContainer {
   width: 30%;
   display: flex;
@@ -5,25 +12,18 @@
   justify-content: space-around;
 }
 
-.button {
-  margin-left: 15px;
-}
-
-.main {
-  display: flex;
-
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.circleList {
+.circleContainer {
   margin: 0;
   padding: 0;
   margin-top: 115px;
   display: flex;
   flex-direction: row;
   gap: 13px;
+
+}
+
+.button {
+  margin-left: 15px;
 }
 
 .circleElement {

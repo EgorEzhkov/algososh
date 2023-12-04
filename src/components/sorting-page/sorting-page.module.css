@@ -1,0 +1,25 @@
+.main {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn {
+  width: 205px;
+}
+
+.settingsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.radioInput {
+  display: flex;
+  gap: 40px;
+}
+
+.typeSortContainer {
+  display: flex;
+  gap: 10px
+}

@@ -19,8 +19,8 @@ interface Arr {
   state: ElementStates;
 };
 
-const selectionSort = async (arr: Arr[], setArr: React.Dispatch<React.SetStateAction<Arr[]>>, setLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
-  setLoading(true);
+const selectionSort = async (arr: Arr[], setArr: React.Dispatch<React.SetStateAction<Arr[]>>, setLoader: React.Dispatch<React.SetStateAction<boolean>>, increasing: boolean) => {
+  setLoader(true);
   const { length } = arr;
   for (let i = 0; i < length - 1; i++) {
     let maxInd = i;
@@ -29,10 +29,17 @@ const selectionSort = async (arr: Arr[], setArr: React.Dispatch<React.SetStateAc
     for (let j = i + 1; j < length; j++) {
       arr[j].state = ElementStates.Changing;
       setArr([...arr]);
-      await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS));
-      if (arr[maxInd].value > arr[j].value) {
-        maxInd = j;
-      };
+      await new Promise(resolve => setTimeout(resolve, 20));
+      if (increasing === true) {
+        if (arr[maxInd].value > arr[j].value) {
+          maxInd = j;
+        }
+      }
+      if (increasing === false) {
+        if (arr[maxInd].value < arr[j].value) {
+          maxInd = j;
+        }
+      }
       arr[j].state = ElementStates.Default;
       setArr([...arr]);
     }
@@ -44,14 +51,15 @@ const selectionSort = async (arr: Arr[], setArr: React.Dispatch<React.SetStateAc
     [arr[maxInd].state, arr[i + 1].state, arr[i].state] = [ElementStates.Default, ElementStates.Modified, ElementStates.Modified];
     setArr([...arr]);
   }
-  setLoading(false);
+  setLoader(false);
 };
 
 export const SortingPage: React.FC = () => {
 
   const [radioSelect, setRadioSelect] = useState("Выбор");
   const [arr, setArr] = useState<Arr[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loaderIncreasing, setLoaderIncreasing] = useState<boolean>(false)
+  const [loaderDescending, setLoaderDescending] = useState<boolean>(false)
 
   const onChangeRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRadioSelect(e.target.value);
@@ -72,9 +80,13 @@ export const SortingPage: React.FC = () => {
     setArr(newArr);
   };
 
-  const sortArrButtonHandler = () => {
+  const sortArrButtonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (radioSelect === "Выбор") {
-      selectionSort(arr, setArr, setLoading)
+      if (e.currentTarget.value === 'По убыванию') {
+        selectionSort(arr, setArr, setLoaderDescending, false);
+      } else {
+        selectionSort(arr, setArr, setLoaderIncreasing, true);
+      }
     }
   };
 
@@ -88,13 +100,15 @@ export const SortingPage: React.FC = () => {
               name="sort"
               value='Выбор'
               onChange={onChangeRadio}
-              defaultChecked>
+              defaultChecked
+              disabled={loaderDescending || loaderIncreasing}>
             </RadioInput>
             <RadioInput
               label="Пузырёк"
               name='sort'
               value='Пузырёк'
-              onChange={onChangeRadio}>
+              onChange={onChangeRadio}
+              disabled={loaderDescending || loaderIncreasing}>
             </RadioInput>
           </div>
           <div className={styles.typeSortContainer}>
@@ -102,24 +116,31 @@ export const SortingPage: React.FC = () => {
               text="По возрастанию"
               sorting={Direction.Ascending}
               extraClass={styles.btn}
-              onClick={sortArrButtonHandler}
-              isLoader={loading}></Button>
+              value='По возрастанию'
+              onClick={(e) => { sortArrButtonHandler(e) }}
+              isLoader={loaderIncreasing}
+              disabled={loaderDescending}
+            ></Button>
             <Button
               text='По убыванию'
               sorting={Direction.Descending}
               extraClass={styles.btn}
-              disabled={loading}></Button>
+              value='По убыванию'
+              onClick={(e) => { sortArrButtonHandler(e) }}
+              isLoader={loaderDescending}
+              disabled={loaderIncreasing}
+            ></Button>
           </div>
           <div>
             <Button
               text="Новый массив"
               extraClass={styles.btn}
               onClick={newArrButtonHandler}
-              disabled={loading}>
+              disabled={loaderDescending || loaderIncreasing}>
             </Button>
           </div>
         </div>
-        <div >
+        <div>
           <ul className={styles.columnContainer}>
             {arr && arr.map((el: Arr, index: number) => {
               return (

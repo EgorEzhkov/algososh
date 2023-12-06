@@ -29,13 +29,12 @@ const selectionSort = async (arr: Arr[], setArr: React.Dispatch<React.SetStateAc
     for (let j = i + 1; j < length; j++) {
       arr[j].state = ElementStates.Changing;
       setArr([...arr]);
-      await new Promise(resolve => setTimeout(resolve, 20));
-      if (increasing === true) {
+      await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS));
+      if (increasing) {
         if (arr[maxInd].value > arr[j].value) {
           maxInd = j;
         }
-      }
-      if (increasing === false) {
+      } else {
         if (arr[maxInd].value < arr[j].value) {
           maxInd = j;
         }
@@ -53,6 +52,39 @@ const selectionSort = async (arr: Arr[], setArr: React.Dispatch<React.SetStateAc
   }
   setLoader(false);
 };
+
+const bubbleSort = async (arr: Arr[], setArr: React.Dispatch<React.SetStateAction<Arr[]>>, setLoader: React.Dispatch<React.SetStateAction<boolean>>, increasing: boolean) => {
+  setLoader(true)
+  const { length } = arr
+  for (let i = 0; i < length; i++) {
+    for (let j = 0; j < length - i - 1; j++) {
+      [arr[j].state, arr[j + 1].state] = [ElementStates.Changing, ElementStates.Changing]
+      setArr([...arr])
+      await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS));
+      if (increasing) {
+        if (arr[j].value < arr[j + 1].value) {
+          let tmp = arr[j];
+          arr[j] = arr[j + 1];
+          arr[j + 1] = tmp;
+          setArr([...arr]);
+        }
+      } else {
+        if (arr[j].value > arr[j + 1].value) {
+          let tmp = arr[j];
+          arr[j] = arr[j + 1];
+          arr[j + 1] = tmp;
+          setArr([...arr]);
+        }
+      }
+      [arr[j].state, arr[j + 1].state] = [ElementStates.Default, ElementStates.Modified]
+      setArr([...arr])
+    }
+    if (i === length - 1) {
+      arr[0].state = ElementStates.Modified
+    }
+  }
+  setLoader(false)
+}
 
 export const SortingPage: React.FC = () => {
 
@@ -86,6 +118,12 @@ export const SortingPage: React.FC = () => {
         selectionSort(arr, setArr, setLoaderDescending, false);
       } else {
         selectionSort(arr, setArr, setLoaderIncreasing, true);
+      }
+    } else if (radioSelect === 'Пузырёк') {
+      if (e.currentTarget.value === 'По возрастанию') {
+        bubbleSort(arr, setArr, setLoaderIncreasing, false);
+      } else {
+        bubbleSort(arr, setArr, setLoaderDescending, true);
       }
     }
   };

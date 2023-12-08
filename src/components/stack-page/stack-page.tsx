@@ -44,13 +44,13 @@ class Stack<T> implements IStack<T> {
   clear = () => this.container = []
 }
 
+const stack = new Stack<Arr>()
 
 export const StackPage: React.FC = () => {
 
   const [arr, setArr] = useState<Arr[]>([])
   const [inputValue, setInputValue] = useState<string | null>(null)
 
-  const [stack] = useState(new Stack<Arr>())
 
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {

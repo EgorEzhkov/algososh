@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from './stack-page.module.css'
 import { Input } from "../ui/input/input";
@@ -11,6 +11,7 @@ interface IStack<T> {
   pop: () => void;
   peak: () => T | null;
   getSize: () => number;
+  clear: () => void;
 }
 
 interface Arr {
@@ -50,8 +51,6 @@ export const StackPage: React.FC = () => {
 
   const [arr, setArr] = useState<Arr[]>([])
   const [inputValue, setInputValue] = useState<string | null>(null)
-
-
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.currentTarget.value)

@@ -5,6 +5,7 @@ import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { ElementStates } from "../../types/element-states";
 import { Circle } from "../ui/circle/circle";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 
 interface Arr {
@@ -119,7 +120,7 @@ export const QueuePage: React.FC = () => {
     setLoaderAdd(true)
     setIndexChanging(queue.getTail())
     queue.enqueue({ value: inputValue!, state: ElementStates.Changing })
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS))
     setArr([...queue.getElements()])
     setInputValue('')
     setIndexChanging(null)
@@ -129,7 +130,7 @@ export const QueuePage: React.FC = () => {
   const removeButtonHandler = async () => {
     setLoaderRemove(true)
     setIndexChanging(queue.getHead())
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS))
     queue.dequeue()
     setArr([...queue.getElements()])
     setIndexChanging(null)

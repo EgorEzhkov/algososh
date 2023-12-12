@@ -1,0 +1,52 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.firstContainer {
+  display: flex;
+  gap: 15px;
+}
+
+.secondContainer {
+  display: flex;
+  gap: 15px;
+}
+
+.input {
+  width: 205px;
+}
+
+.buttonFirstContainer {
+  width: 175px;
+}
+
+.buttonSecondContainer {
+  width: 365px;
+}
+
+.circleContainer {
+  display: flex;
+  flex-direction: row;
+  margin: 120px 0;
+  padding: 0;
+}
+
+.circleList {
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+
+.circleElement {
+  margin: 0 20px
+}
+
+

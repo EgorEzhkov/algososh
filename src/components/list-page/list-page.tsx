@@ -126,6 +126,7 @@ class LinkedList<T> implements ILinkedList<T> {
       this.size--
     } else {
       this.head = null
+      this.size--
     }
   }
 
@@ -180,9 +181,10 @@ export const ListPage: React.FC = () => {
   const [arr, setArr] = useState<NodeArr<Arr>[]>([])
   const [valueInput, setValueInput] = useState<string | null>(null)
   const [indexInput, setIndexInput] = useState<string | null>(null)
-  const [indexChanging, setIndexChanging] = useState<any>(null)
   const [headShow, setHeadShow] = useState<boolean>(false)
   const [tailShow, setTailShow] = useState<boolean>(false)
+  const [circleValue, setCircleValue] = useState<number | string | null>(null)
+  const [indexChanging, setIndexChanging] = useState<number | null>(null)
 
   const onChangeInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValueInput(e.currentTarget.value)
@@ -193,51 +195,99 @@ export const ListPage: React.FC = () => {
   }
 
   const addOnHeadButtonHandler = async () => {
+    setValueInput('')
     setHeadShow(true)
+    setCircleValue(valueInput)
+    setIndexChanging(0)
     await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS))
     setHeadShow(false)
+    setCircleValue(null)
+    setIndexChanging(null)
     list.prepend({ value: valueInput!, state: ElementStates.Modified })
     setArr([...list.getElements()])
     await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS))
     list.getHead()!.value.state = ElementStates.Default
     setArr([...list.getElements()])
-    setValueInput('')
+
   }
 
   const addOnTailButtonHandler = async () => {
+    setValueInput('')
     setTailShow(true)
+    setCircleValue(valueInput)
+    setIndexChanging(list.getSize())
     await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS))
     setTailShow(false)
+    setCircleValue(null)
+    setIndexChanging(null)
     list.append({ value: valueInput!, state: ElementStates.Modified })
     setArr([...list.getElements()])
     await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS))
     list.getTail()!.value.state = ElementStates.Default
     setArr([...list.getElements()])
-    setValueInput('')
   }
 
-  const removeHeadButtonHandler = () => {
+  const insertAtButtonHandler = async (element: Arr, index: number) => {
+    let count = 0
+    setIndexInput('')
+    setValueInput('')
+    await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS))
+    while (index >= count) {
+      setHeadShow(true)
+      list.getElements()[count].value.state = ElementStates.Changing
+      setArr([...list.getElements()])
+      setIndexChanging(count)
+      setCircleValue(element.value)
+      count++
+      await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS))
+    }
+    list.insertAt(element, index)
+    setArr([...list.getElements()])
+    await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS))
+    while (count !== -1) {
+      list.getElements()[count].value.state = ElementStates.Default
+      setArr([...list.getElements()])
+      count--
+    }
+    setArr([...list.getElements()])
+    setHeadShow(false)
+  }
+
+  const removeHeadButtonHandler = async () => {
+    setHeadShow(true)
+    setCircleValue(list.getHead()!.value.value)
+    list.getHead()!.value.value = ''
+    setArr([...list.getElements()])
+    await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS))
     list.removeHead()
     setArr([...list.getElements()])
+    setHeadShow(false)
+    setCircleValue(null)
   }
 
-  const removeTailButtonHandler = () => {
+  const removeTailButtonHandler = async () => {
+    setTailShow(true)
+    setCircleValue(list.getTail()!.value.value)
+    list.getTail()!.value.value = ''
+    setArr([...list.getElements()])
+    await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS))
     list.removeTail()
     setArr([...list.getElements()])
+    setTailShow(false)
+    setCircleValue(null)
   }
 
   const addHead = (index: number) => {
-    return index === 0 && headShow ?
-      <Circle letter={valueInput!} state={ElementStates.Changing} isSmall={true}></Circle>
+    return index === indexChanging && headShow ?
+      <Circle letter={String(circleValue)} state={ElementStates.Changing} isSmall={true}></Circle>
       : index === 0 ?
         'head' : null
   }
 
   const addTail = (index: number) => {
     const tailIndex = list.getSize()
-    console.log(tailIndex)
     return index === tailIndex - 1 && tailShow ?
-      <Circle letter={valueInput!} state={ElementStates.Changing} isSmall={true}></Circle>
+      <Circle letter={String(circleValue)} state={ElementStates.Changing} isSmall={true}></Circle>
       : index === tailIndex - 1 ?
         'tail' : null
   }
@@ -257,24 +307,42 @@ export const ListPage: React.FC = () => {
               onChange={onChangeInputValue}
             >
             </Input>
-            <Button text="Добавить в head" onClick={addOnHeadButtonHandler} extraClass={styles.buttonFirstContainer}></Button>
-            <Button text="Добавить в tail" onClick={addOnTailButtonHandler} extraClass={styles.buttonFirstContainer}></Button>
-            <Button text="Удалить из head" onClick={removeHeadButtonHandler} extraClass={styles.buttonFirstContainer}></Button>
-            <Button text="Удалить из tail" onClick={removeTailButtonHandler} extraClass={styles.buttonFirstContainer}></Button>
+            <Button
+              text="Добавить в head"
+              onClick={addOnHeadButtonHandler}
+              extraClass={styles.buttonFirstContainer}
+              disabled={!valueInput}
+            ></Button>
+            <Button text="Добавить в tail"
+              onClick={addOnTailButtonHandler}
+              extraClass={styles.buttonFirstContainer}
+              disabled={!valueInput}
+            ></Button>
+            <Button text="Удалить из head"
+              onClick={removeHeadButtonHandler}
+              extraClass={styles.buttonFirstContainer}
+              disabled={!(list.getElements().length > 0)}
+            ></Button>
+            <Button text="Удалить из tail"
+              onClick={removeTailButtonHandler}
+              extraClass={styles.buttonFirstContainer}
+              disabled={!(list.getElements().length > 0)}
+            ></Button>
           </div>
           <div className={styles.secondContainer}>
             <Input
               extraClass={styles.input}
-              max='4'
-              maxLength={4}
-              isLimitText={true}
+              type={'number'}
               placeholder='Введите индекс'
               value={indexInput ? indexInput : ''}
               onChange={onChangeIndexValue}
             >
             </Input>
             <Button text="Удалить по индексу" extraClass={styles.buttonSecondContainer}></Button>
-            <Button text="Добавить по индексу" extraClass={styles.buttonSecondContainer}></Button>
+            <Button
+              text="Добавить по индексу"
+              extraClass={styles.buttonSecondContainer}
+              onClick={() => insertAtButtonHandler({ value: valueInput!, state: ElementStates.Modified }, Number(indexInput))}></Button>
           </div>
         </div>
         <ul className={styles.circleContainer}>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { Direction } from "../../types/direction";
 import { ElementStates } from "../../types/element-states";
@@ -93,10 +93,6 @@ export const SortingPage: React.FC = () => {
   const [loaderIncreasing, setLoaderIncreasing] = useState<boolean>(false)
   const [loaderDescending, setLoaderDescending] = useState<boolean>(false)
 
-  const onChangeRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRadioSelect(e.target.value);
-  };
-
   const randomArr = () => {
     return [...new Array(Math.floor(Math.random() * (17 - 3 + 1)) + 3)]
       .map(() => {
@@ -105,6 +101,15 @@ export const SortingPage: React.FC = () => {
           state: ElementStates.Default
         };
       });
+  };
+
+  useEffect(() => {
+    setArr(randomArr());
+  }, [])
+
+
+  const onChangeRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRadioSelect(e.target.value);
   };
 
   const newArrButtonHandler = () => {

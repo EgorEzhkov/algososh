@@ -49,7 +49,7 @@ export const FibonacciPage: React.FC = () => {
             <Button text="Рассчитать" disabled={!(1 <= inputValue! && inputValue! <= 19)} onClick={buttonHandler} isLoader={loader}></Button>
           </div>
         </div>
-        <div>
+        <div className={styles.divContainer}>
           <ul className={styles.circleContainer}>
             {arr && arr.map((el, index) => {
 

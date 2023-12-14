@@ -165,12 +165,12 @@ export const QueuePage: React.FC = () => {
           </div>
         </div>
         <ul className={styles.circleContainer}>
-          {arr && arr.map((el: any, index) => {
+          {arr && arr.map((el: Arr | null, index: number) => {
             return (
               <li key={index} className={styles.circleElement}>
                 <Circle
                   index={index}
-                  letter={el ? el.value : null}
+                  letter={el ? String(el.value) : ''}
                   state={indexChanging === index ? ElementStates.Changing : ElementStates.Default}
                   head={el && queue.getHead() === index ? 'head' : ''}
                   tail={el && queue.getPrevTail() === index ? 'tail' : ''}>

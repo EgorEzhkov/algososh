@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from './list-page.module.css'
 import { Input } from "../ui/input/input";
@@ -209,6 +209,15 @@ export const ListPage: React.FC = () => {
   const [loaderInsertAt, setLoaderInsertAt] = useState<boolean>(false)
   const [loaderRemoveAt, setLoaderRemoveAt] = useState<boolean>(false)
 
+  useEffect(() => {
+    const firstArr = [...new Array(Math.floor(Math.random() * (5)) + 1)]
+      .map(() => Math.round(Math.random() * 6))
+    firstArr.forEach((el) => {
+      list.append({ value: String(el), state: ElementStates.Default })
+      setArr([...list.getElements()])
+    })
+  }, [])
+
   const onChangeInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValueInput(e.currentTarget.value)
   }
@@ -409,7 +418,6 @@ export const ListPage: React.FC = () => {
               placeholder='Введите индекс'
               value={indexInput ? indexInput : ''}
               onChange={onChangeIndexValue}
-
             >
             </Input>
             <Button
@@ -417,7 +425,7 @@ export const ListPage: React.FC = () => {
               extraClass={styles.buttonSecondContainer}
               onClick={() => removeAtIndexButtonHandler(Number(indexInput!))}
               isLoader={loaderRemoveAt}
-              disabled={!indexInput || loaderAddTail || loaderInsertAt || loaderRemoveHead || loaderRemoveTail || loaderAddHead || arr.length < 1}
+              disabled={!indexInput || loaderAddTail || loaderInsertAt || loaderRemoveHead || loaderRemoveTail || loaderAddHead || arr.length < 1 || list.getSize() - 1 < Number(indexInput) || Number(indexInput) < 0}
             ></Button>
             <Button
               text="Добавить по индексу"
@@ -425,7 +433,7 @@ export const ListPage: React.FC = () => {
               onClick={() =>
                 insertAtButtonHandler({ value: valueInput!, state: ElementStates.Modified }, Number(indexInput))}
               isLoader={loaderInsertAt}
-              disabled={!indexInput || loaderAddTail || loaderRemoveAt || loaderRemoveHead || loaderRemoveTail || loaderAddHead || arr.length < 1}
+              disabled={!indexInput || loaderAddTail || loaderRemoveAt || loaderRemoveHead || loaderRemoveTail || loaderAddHead || arr.length < 1 || list.getSize() - 1 < Number(indexInput) || Number(indexInput) < 0}
             ></Button>
           </div>
         </div>

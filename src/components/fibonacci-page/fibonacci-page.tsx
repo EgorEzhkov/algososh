@@ -1,5 +1,4 @@
-import { BlockList } from "net";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";

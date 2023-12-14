@@ -1,4 +1,4 @@
-import React, { HtmlHTMLAttributes, useState } from "react";
+import React, { useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import styles from './string.module.css'

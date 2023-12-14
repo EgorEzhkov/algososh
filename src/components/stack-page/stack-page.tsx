@@ -12,6 +12,7 @@ interface IStack<T> {
   peak: () => T | null;
   getSize: () => number;
   clear: () => void;
+  getElements: () => T[];
 }
 
 interface Arr {

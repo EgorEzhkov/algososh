@@ -23,6 +23,7 @@ interface IQueue<T> {
   isEmpty: () => void;
   getElements: () => void;
   isFull: () => boolean;
+  clear: () => void;
 }
 
 class Queue<T> implements IQueue<T> {

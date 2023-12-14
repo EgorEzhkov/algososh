@@ -23,13 +23,13 @@ interface ILinkedList<T> {
   append: (element: T) => void;
   prepend: (element: T) => void;
   insertAt: (element: T, position: number) => void;
+  removeHead: () => void;
+  removeTail: () => void;
+  deleteAt: (index: number) => void;
   getSize: () => number;
-  print: () => void;
   getHead: () => NodeArr<T> | null
   getTail: () => NodeArr<T> | null | undefined
   getElements: () => NodeArr<T>[];
-  removeHead: () => void;
-  removeTail: () => void;
 }
 
 class Node<T> {
@@ -75,6 +75,33 @@ class LinkedList<T> implements ILinkedList<T> {
     }
   }
 
+  deleteAt(index: number) {
+    if (index < 0 || index > this.size) {
+      console.log("Enter a valid index");
+      return;
+    } else {
+      if (index === 0) {
+        if (this.head?.next !== null) {
+          this.head = this.head!.next
+        } else {
+          this.head = null
+        }
+      } else {
+        let curr = this.head;
+        let currIndex = 0;
+        while (curr) {
+          if (currIndex === index - 1) {
+            console.log(curr)
+            curr.next = curr.next!.next
+          }
+          curr = curr.next;
+          currIndex++;
+        }
+      }
+      this.size--
+    }
+  }
+
   append(element: T) {
     const node = new Node(element);
     let current;
@@ -106,15 +133,6 @@ class LinkedList<T> implements ILinkedList<T> {
 
   getSize() {
     return this.size;
-  }
-
-  print() {
-    let curr = this.head;
-    let res = "";
-    while (curr) {
-      res += `${curr.value} `;
-      curr = curr.next;
-    }
   }
 
   removeHead() {
@@ -177,7 +195,6 @@ const list = new LinkedList<Arr>();
 
 export const ListPage: React.FC = () => {
 
-
   const [arr, setArr] = useState<NodeArr<Arr>[]>([])
   const [valueInput, setValueInput] = useState<string | null>(null)
   const [indexInput, setIndexInput] = useState<string | null>(null)
@@ -185,6 +202,12 @@ export const ListPage: React.FC = () => {
   const [tailShow, setTailShow] = useState<boolean>(false)
   const [circleValue, setCircleValue] = useState<number | string | null>(null)
   const [indexChanging, setIndexChanging] = useState<number | null>(null)
+  const [loaderAddHead, setLoaderAddHead] = useState<boolean>(false)
+  const [loaderAddTail, setLoaderAddTail] = useState<boolean>(false)
+  const [loaderRemoveHead, setLoaderRemoveHead] = useState<boolean>(false)
+  const [loaderRemoveTail, setLoaderRemoveTail] = useState<boolean>(false)
+  const [loaderInsertAt, setLoaderInsertAt] = useState<boolean>(false)
+  const [loaderRemoveAt, setLoaderRemoveAt] = useState<boolean>(false)
 
   const onChangeInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValueInput(e.currentTarget.value)
@@ -195,6 +218,7 @@ export const ListPage: React.FC = () => {
   }
 
   const addOnHeadButtonHandler = async () => {
+    setLoaderAddHead(true)
     setValueInput('')
     setHeadShow(true)
     setCircleValue(valueInput)
@@ -208,14 +232,15 @@ export const ListPage: React.FC = () => {
     await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS))
     list.getHead()!.value.state = ElementStates.Default
     setArr([...list.getElements()])
-
+    setLoaderAddHead(false)
   }
 
   const addOnTailButtonHandler = async () => {
+    setLoaderAddTail(true)
     setValueInput('')
     setTailShow(true)
     setCircleValue(valueInput)
-    setIndexChanging(list.getSize())
+    setIndexChanging(list.getSize() - 1)
     await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS))
     setTailShow(false)
     setCircleValue(null)
@@ -225,9 +250,11 @@ export const ListPage: React.FC = () => {
     await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS))
     list.getTail()!.value.state = ElementStates.Default
     setArr([...list.getElements()])
+    setLoaderAddTail(false)
   }
 
   const insertAtButtonHandler = async (element: Arr, index: number) => {
+    setLoaderInsertAt(true)
     let count = 0
     setIndexInput('')
     setValueInput('')
@@ -251,10 +278,43 @@ export const ListPage: React.FC = () => {
     }
     setArr([...list.getElements()])
     setHeadShow(false)
+    setLoaderInsertAt(false)
+  }
+
+  const removeAtIndexButtonHandler = async (index: number) => {
+    setLoaderRemoveAt(true)
+    let count = 0
+    setIndexInput('')
+    while (index >= count) {
+      list.getElements()[count].value.state = ElementStates.Changing
+      setArr([...list.getElements()])
+      setIndexChanging(count)
+      count++
+      await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS))
+    }
+    setTailShow(true)
+    setCircleValue(list.getElements()[index].value.value)
+    list.getElements()[index].value.value = ''
+    setArr([...list.getElements()])
+    await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS))
+    list.deleteAt(index)
+    setArr([...list.getElements()])
+    setTailShow(false)
+    count -= 2
+    while (count !== -1) {
+      list.getElements()[count].value.state = ElementStates.Default
+      setArr([...list.getElements()])
+      count--
+    }
+    setArr([...list.getElements()])
+    setTailShow(false)
+    setLoaderRemoveAt(false)
   }
 
   const removeHeadButtonHandler = async () => {
+    setLoaderRemoveHead(true)
     setHeadShow(true)
+    setIndexChanging(0)
     setCircleValue(list.getHead()!.value.value)
     list.getHead()!.value.value = ''
     setArr([...list.getElements()])
@@ -263,10 +323,14 @@ export const ListPage: React.FC = () => {
     setArr([...list.getElements()])
     setHeadShow(false)
     setCircleValue(null)
+    setIndexChanging(null)
+    setLoaderRemoveHead(false)
   }
 
   const removeTailButtonHandler = async () => {
+    setLoaderRemoveTail(true)
     setTailShow(true)
+    setIndexChanging(list.getSize() - 1)
     setCircleValue(list.getTail()!.value.value)
     list.getTail()!.value.value = ''
     setArr([...list.getElements()])
@@ -275,6 +339,8 @@ export const ListPage: React.FC = () => {
     setArr([...list.getElements()])
     setTailShow(false)
     setCircleValue(null)
+    setIndexChanging(null)
+    setLoaderRemoveTail(false)
   }
 
   const addHead = (index: number) => {
@@ -286,7 +352,7 @@ export const ListPage: React.FC = () => {
 
   const addTail = (index: number) => {
     const tailIndex = list.getSize()
-    return index === tailIndex - 1 && tailShow ?
+    return index === indexChanging && tailShow ?
       <Circle letter={String(circleValue)} state={ElementStates.Changing} isSmall={true}></Circle>
       : index === tailIndex - 1 ?
         'tail' : null
@@ -311,38 +377,56 @@ export const ListPage: React.FC = () => {
               text="Добавить в head"
               onClick={addOnHeadButtonHandler}
               extraClass={styles.buttonFirstContainer}
-              disabled={!valueInput}
+              disabled={!valueInput || loaderAddTail || loaderInsertAt || loaderRemoveAt || loaderRemoveHead || loaderRemoveTail || loaderAddHead}
+              isLoader={loaderAddHead}
+
             ></Button>
             <Button text="Добавить в tail"
               onClick={addOnTailButtonHandler}
               extraClass={styles.buttonFirstContainer}
-              disabled={!valueInput}
+              disabled={!valueInput || loaderInsertAt || loaderRemoveAt || loaderRemoveHead || loaderRemoveTail || loaderAddHead}
+              isLoader={loaderAddTail}
             ></Button>
             <Button text="Удалить из head"
               onClick={removeHeadButtonHandler}
               extraClass={styles.buttonFirstContainer}
-              disabled={!(list.getElements().length > 0)}
+              disabled={!(list.getElements().length > 0) || loaderAddTail || loaderInsertAt || loaderRemoveAt || loaderRemoveTail || loaderAddHead}
+              isLoader={loaderRemoveHead}
             ></Button>
             <Button text="Удалить из tail"
               onClick={removeTailButtonHandler}
               extraClass={styles.buttonFirstContainer}
-              disabled={!(list.getElements().length > 0)}
+              disabled={!(list.getElements().length > 0) || loaderAddTail || loaderInsertAt || loaderRemoveAt || loaderRemoveHead || loaderAddHead}
+              isLoader={loaderRemoveTail}
             ></Button>
           </div>
           <div className={styles.secondContainer}>
             <Input
               extraClass={styles.input}
               type={'number'}
+              max={list.getSize() - 1}
+              min={arr && 0}
               placeholder='Введите индекс'
               value={indexInput ? indexInput : ''}
               onChange={onChangeIndexValue}
+
             >
             </Input>
-            <Button text="Удалить по индексу" extraClass={styles.buttonSecondContainer}></Button>
+            <Button
+              text="Удалить по индексу"
+              extraClass={styles.buttonSecondContainer}
+              onClick={() => removeAtIndexButtonHandler(Number(indexInput!))}
+              isLoader={loaderRemoveAt}
+              disabled={!indexInput || loaderAddTail || loaderInsertAt || loaderRemoveHead || loaderRemoveTail || loaderAddHead || arr.length < 1}
+            ></Button>
             <Button
               text="Добавить по индексу"
               extraClass={styles.buttonSecondContainer}
-              onClick={() => insertAtButtonHandler({ value: valueInput!, state: ElementStates.Modified }, Number(indexInput))}></Button>
+              onClick={() =>
+                insertAtButtonHandler({ value: valueInput!, state: ElementStates.Modified }, Number(indexInput))}
+              isLoader={loaderInsertAt}
+              disabled={!indexInput || loaderAddTail || loaderRemoveAt || loaderRemoveHead || loaderRemoveTail || loaderAddHead || arr.length < 1}
+            ></Button>
           </div>
         </div>
         <ul className={styles.circleContainer}>

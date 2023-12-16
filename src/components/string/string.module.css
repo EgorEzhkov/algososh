@@ -1,0 +1,31 @@
+.inputContainer {
+  width: 30%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.button {
+  margin-left: 15px;
+}
+
+.main {
+  display: flex;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.circleList {
+  margin: 0;
+  padding: 0;
+  margin-top: 115px;
+  display: flex;
+  flex-direction: row;
+  gap: 13px;
+}
+
+.circleElement {
+  list-style: none;
+}

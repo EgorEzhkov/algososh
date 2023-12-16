@@ -1,0 +1,39 @@
+.main {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn {
+  width: 205px;
+}
+
+.settingsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.radioInput {
+  display: flex;
+  gap: 40px;
+}
+
+.typeSortContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.columnContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 0;
+  height: 380px;
+}
+
+.columnElement {
+  list-style: none;
+}

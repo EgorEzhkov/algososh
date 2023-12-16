@@ -1,0 +1,36 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.firstContainer {
+  display: flex;
+  gap: 15px;
+}
+
+.secondContainer {
+  margin-left: 100px;
+}
+
+.input {
+  width: 440px;
+}
+
+.circleContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 13px;
+  margin: 120px 0;
+  padding: 0;
+}
+
+.circleElement {
+  list-style: none;
+}

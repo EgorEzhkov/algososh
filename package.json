@@ -2,15 +2,14 @@
   "name": "algorithms-project",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://egorezhkov.github.io/algososh/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.2",
-    "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.4.0",
     "@types/node": "^16.11.22",
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
-    "css-loader": "^6.8.1",
     "nanoid": "^3.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -24,7 +23,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "cypress:open": "cypress open"
   },
   "eslintConfig": {
     "extends": [
@@ -45,12 +47,13 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/react": "^12.1.2",
     "@types/react-router-dom": "^5.3.3",
+    "@types/react-test-renderer": "^18.0.0",
+    "cypress": "^11.0.1",
+    "eslint-plugin-cypress": "^2.12.1",
+    "gh-pages": "^4.0.0",
     "jest": "^27.5.1",
-    "redux-mock-store": "^1.5.4"
-  },
-  "description": "В проектной работе мы предлагаем вам написать визуализатор алгоритмов, которые вы будете изучать в течение месяца. Эта проектная работа заточена на анимацию и поэтапное отображение работы алгоритма, что позволит вам детальнее понять каждый шаг его работы.",
-  "main": "index.js",
-  "author": "",
-  "license": "ISC"
+    "react-test-renderer": "^17.0.2"
+  }
 }

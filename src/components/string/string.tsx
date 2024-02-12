@@ -45,6 +45,21 @@ export const StringComponent: React.FC = () => {
     setLoading(false)
   }
 
+  const reverseString1 = (str: string) => {
+    let arr = str.split('')
+    let mid = Math.ceil(arr.length / 2)
+    let end = arr.length - 1
+    for (let i = 0; i < mid; i++) {
+      let j = end - i;
+      let tmp = arr[i]
+      arr[i] = arr[j]
+      arr[j] = tmp
+    }
+    return arr
+  }
+
+  console.log(reverseString1('1234'))
+
   const buttonHandler = () => {
     const arr = input.split('').map((value => ({ value, state: ElementStates.Default })));
     setArr([...arr])

@@ -20,10 +20,15 @@ describe("string page", () => {
         cy.get("[class^=circle_circle__TeYrD]").should("have.class", "circle_default__d-W4U");
       }
     });
+    cy.wait(1000);
+    cy.get("li").then((el) => {
+      cy.wrap(el.text()).should("equal", "rweq");
+    });
     cy.get("li").each((el, index) => {
       if (index === 0 || index === 3) {
         cy.get("[class^=circle_circle__TeYrD]").should("have.class", "circle_modified__2QHpx");
       }
+
       if (index === 1 || index === 2) {
         cy.get("[class^=circle_circle__TeYrD]").should("have.class", "circle_changing__kFPvL");
       }
@@ -31,6 +36,10 @@ describe("string page", () => {
 
     cy.get("li").each(() => {
       cy.get("[class^=circle_circle__TeYrD]").should("have.class", "circle_modified__2QHpx");
+    });
+    cy.wait(1000);
+    cy.get("li").then((el) => {
+      cy.wrap(el.text()).should("equal", "rewq");
     });
   });
 });

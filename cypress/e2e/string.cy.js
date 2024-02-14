@@ -2,11 +2,11 @@ describe("string page", () => {
   before(function () {
     cy.visit("http://localhost:3000/recursion");
   });
-  it("if the input is empty, then the add button is not available", () => {
+  it("Если input пустой, то кнопка отключена", () => {
     cy.get("input").should("have.text", "");
     cy.get("button").should("be.disabled");
   });
-  it("Correct string reversal", () => {
+  it("Корректный разворот строки", () => {
     cy.get("input").type("qwer");
     cy.get("button").eq(1).click();
 

@@ -1,5 +1,3 @@
-import { ElementStates } from "../../src/types/element-states";
-
 describe("string page", () => {
   before(function () {
     cy.visit("http://localhost:3000/recursion");
@@ -14,29 +12,31 @@ describe("string page", () => {
 
     cy.get("li").each((el, index) => {
       if (index === 0 || index === 3) {
-        cy.get("[class^=circle_circle__TeYrD]").should("have.class", "circle_changing__kFPvL");
+        cy.wrap(el).find("[class*=circle_changing]");
       }
       if (index === 1 || index === 2) {
-        cy.get("[class^=circle_circle__TeYrD]").should("have.class", "circle_default__d-W4U");
+        cy.wrap(el).find("[class*=circle_default]");
       }
     });
+
     cy.wait(1000);
     cy.get("li").then((el) => {
       cy.wrap(el.text()).should("equal", "rweq");
     });
+
     cy.get("li").each((el, index) => {
       if (index === 0 || index === 3) {
-        cy.get("[class^=circle_circle__TeYrD]").should("have.class", "circle_modified__2QHpx");
+        cy.wrap(el).find("[class*=circle_modified]");
       }
-
       if (index === 1 || index === 2) {
-        cy.get("[class^=circle_circle__TeYrD]").should("have.class", "circle_changing__kFPvL");
+        cy.wrap(el).find("[class*=circle_changing]");
       }
     });
 
-    cy.get("li").each(() => {
-      cy.get("[class^=circle_circle__TeYrD]").should("have.class", "circle_modified__2QHpx");
+    cy.get("li").each((el) => {
+      cy.wrap(el).find("[class*=circle_modified]");
     });
+
     cy.wait(1000);
     cy.get("li").then((el) => {
       cy.wrap(el.text()).should("equal", "rewq");

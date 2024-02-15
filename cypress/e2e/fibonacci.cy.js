@@ -3,7 +3,7 @@ describe("Fibonacci page", () => {
     cy.visit("http://localhost:3000/fibonacci");
   });
   it("Если input пустой, то кнопка добавления недоступна", () => {
-    cy.get("input").clear();
+    cy.get("input").then((el) => cy.wrap(el.val()).should("have.length", "0"));
     cy.contains("Рассчитать").should("have.attr", "disabled");
   });
   it("Корректность генерации чисел", () => {

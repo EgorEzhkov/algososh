@@ -3,7 +3,7 @@ describe("string page", () => {
     cy.visit("http://localhost:3000/recursion");
   });
   it("Если input пустой, то кнопка отключена", () => {
-    cy.get("input").should("have.text", "");
+    cy.get("input").then((el) => cy.wrap(el.val()).should("have.length", "0"));
     cy.get("button").should("be.disabled");
   });
   it("Корректный разворот строки", () => {

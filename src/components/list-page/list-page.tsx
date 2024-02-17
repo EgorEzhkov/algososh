@@ -6,7 +6,6 @@ import { Button } from "../ui/button/button";
 import { ElementStates } from "../../types/element-states";
 import { Circle } from "../ui/circle/circle";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
-import { resolve } from "path";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 interface Arr {
@@ -375,6 +374,7 @@ export const ListPage: React.FC = () => {
             <Input
               extraClass={styles.input}
               placeholder="Введите значение"
+              name="Введите значение"
               max='4'
               maxLength={4}
               isLimitText={true}
@@ -416,6 +416,7 @@ export const ListPage: React.FC = () => {
               max={list.getSize() - 1}
               min={arr && 0}
               placeholder='Введите индекс'
+              name="Введите индекс"
               value={indexInput ? indexInput : ''}
               onChange={onChangeIndexValue}
             >

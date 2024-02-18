@@ -45,6 +45,8 @@ export const StringComponent: React.FC = () => {
     setLoading(false)
   }
 
+  
+
   const buttonHandler = () => {
     const arr = input.split('').map((value => ({ value, state: ElementStates.Default })));
     setArr([...arr])

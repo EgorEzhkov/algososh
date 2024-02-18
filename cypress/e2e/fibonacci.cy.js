@@ -1,3 +1,5 @@
+import { circleIndex, circleLetter, lastCircle } from "../constans";
+
 describe("Fibonacci page", () => {
   before(() => {
     cy.visit("http://localhost:3000/fibonacci");
@@ -12,33 +14,45 @@ describe("Fibonacci page", () => {
 
     cy.wait(500);
 
-    cy.get("li:last-child p").should("include.text", "1");
-    cy.get("li:last-child div").should("include.text", "0");
+    cy.get(lastCircle).then((el) => {
+      cy.wrap(el.find(circleLetter)).should("include.text", "1");
+      cy.wrap(el.find(circleIndex)).should("include.text", "0");
+    });
 
     cy.wait(500);
 
-    cy.get("li:last-child p").should("include.text", "1");
-    cy.get("li:last-child div").should("include.text", "1");
+    cy.get(lastCircle).then((el) => {
+      cy.wrap(el.find(circleLetter)).should("include.text", "1");
+      cy.wrap(el.find(circleIndex)).should("include.text", "1");
+    });
 
     cy.wait(500);
 
-    cy.get("li:last-child p").should("include.text", "2");
-    cy.get("li:last-child div").should("include.text", "2");
+    cy.get(lastCircle).then((el) => {
+      cy.wrap(el.find(circleLetter)).should("include.text", "2");
+      cy.wrap(el.find(circleIndex)).should("include.text", "2");
+    });
 
     cy.wait(500);
 
-    cy.get("li:last-child p").should("include.text", "3");
-    cy.get("li:last-child div").should("include.text", "3");
+    cy.get(lastCircle).then((el) => {
+      cy.wrap(el.find(circleLetter)).should("include.text", "3");
+      cy.wrap(el.find(circleIndex)).should("include.text", "3");
+    });
 
     cy.wait(500);
 
-    cy.get("li:last-child p").should("include.text", "5");
-    cy.get("li:last-child div").should("include.text", "4");
+    cy.get(lastCircle).then((el) => {
+      cy.wrap(el.find(circleLetter)).should("include.text", "5");
+      cy.wrap(el.find(circleIndex)).should("include.text", "4");
+    });
 
     cy.wait(500);
 
-    cy.get("li:last-child p").should("include.text", "8");
-    cy.get("li:last-child div").should("include.text", "5");
+    cy.get(lastCircle).then((el) => {
+      cy.wrap(el.find(circleLetter)).should("include.text", "8");
+      cy.wrap(el.find(circleIndex)).should("include.text", "5");
+    });
 
     cy.get("li").should("have.length", "6");
   });

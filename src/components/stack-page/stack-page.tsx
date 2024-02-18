@@ -52,17 +52,20 @@ export const StackPage: React.FC = () => {
 
   const [arr, setArr] = useState<Arr[]>([])
   const [inputValue, setInputValue] = useState<string | null>(null)
+  const [loader, setLoader] = useState<boolean>(false)
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.currentTarget.value)
   }
 
   const buttonAddHandler = async () => {
+    setLoader(true)
     stack.push({ value: inputValue!, state: ElementStates.Changing })
     setInputValue('')
     setArr([...stack.getElements()])
     await new Promise(resolve => setTimeout(resolve, 500))
     stack.peak()!.state = ElementStates.Default
+    setLoader(false)
     setArr([...stack.getElements()])
   }
 
@@ -94,7 +97,7 @@ export const StackPage: React.FC = () => {
               value={inputValue ? inputValue : ''}
             >
             </Input>
-            <Button text="Добавить" disabled={!(inputValue!?.length > 0)} onClick={buttonAddHandler}></Button>
+            <Button text="Добавить" disabled={!(inputValue!?.length > 0)} onClick={buttonAddHandler} isLoader={loader}></Button>
             <Button text="Удалить" disabled={!(arr.length > 0)} onClick={buttonRemoveHandler}></Button>
           </div>
           <div className={styles.secondContainer}>

@@ -1,8 +1,8 @@
-import { circleIndex, circleLetter, lastCircle } from "../constans";
+import { circle, circleIndex, circleLetter, lastCircle } from "../constans";
 
 describe("Fibonacci page", () => {
   before(() => {
-    cy.visit("http://localhost:3000/fibonacci");
+    cy.visit("fibonacci");
   });
   it("Если input пустой, то кнопка добавления недоступна", () => {
     cy.get("input").then((el) => cy.wrap(el.val()).should("have.length", "0"));
@@ -54,6 +54,6 @@ describe("Fibonacci page", () => {
       cy.wrap(el.find(circleIndex)).should("include.text", "5");
     });
 
-    cy.get("li").should("have.length", "6");
+    cy.get(circle).should("have.length", "6");
   });
 });
